@@ -25,5 +25,5 @@ rm -f domains
 subjack -w domains_dd -t 100 -timeout 30 -ssl -c ~/${DIR}/tool/subjack/fingerprints.json -v 3 | grep -v "Not Vulnerable" | tee takeover
 # second, make http/https urls and get response data
 # third, find your testing poing from grep/gf , etc...
-cat takeover | httprobe | tee hosts ; meg -d 1000 -v / | gf cors > cors
-cat takeover | httprobe | tee hosts ; meg -d 1000 -v / | gf s3-buckets > s3-buckets
+cat takeover | httprobe | tee hosts ; meg -d 1000 -v / hosts | gf cors > cors
+cat takeover | httprobe | tee hosts ; meg -d 1000 -v / hosts | gf s3-buckets > s3-buckets
