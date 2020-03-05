@@ -1,0 +1,9 @@
+cors
+domains
+domains_dd
+*.bak
+hosts
+out/
+s3-buckets
+takeover
+tool/
