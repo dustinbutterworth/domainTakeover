@@ -14,16 +14,17 @@ DIR="github/domainTaker"
 echo "Target Domain?"
 read TARGET
 
-docker run -v $HOME/.config/subfinder:/root/.config/subfinder -it ice3man/subfinder -d ${TARGET} | tee domains
-assetfinder -subs-only ${TARGET} | tee -a domains
-amass enum -norecursive -noalts -d ${TARGET} | tee -a domains
+mkdir ${TARGET}
+docker run -v $HOME/.config/subfinder:/root/.config/subfinder -it ice3man/subfinder -d ${TARGET} | tee ./${TARGET}/domains
+assetfinder -subs-only ${TARGET} | tee -a ./${TARGET}/domains
+amass enum -norecursive -noalts -d ${TARGET} | tee -a ./${TARGET}/domains
 # dedup and sort, then remove garbage lines (starting with non-alphaneumeric characters or spaces)
-cat domains | sort -u | uniq > domains_dd
-sed -i '' '/^[^[:alnum:]]/d' domains_dd
-rm -f domains
+cat ./${TARGET}/domains | sort -u | uniq > ./${TARGET}/domains_dd
+sed -i '' '/^[^[:alnum:]]/d' ./${TARGET}/domains_dd
+rm -f ./${TARGET}/domains
 #subjack
-subjack -w domains_dd -t 100 -timeout 30 -ssl -c ~/${DIR}/tool/subjack/fingerprints.json -v 3 | grep -v "Not Vulnerable" | tee takeover
+subjack -w ./${TARGET}/domains_dd -t 100 -timeout 30 -ssl -c ~/${DIR}/tool/subjack/fingerprints.json -v 3 | grep -v "Not Vulnerable" | tee ./${TARGET}/takeover
 # second, make http/https urls and get response data
 # third, find your testing poing from grep/gf , etc...
-cat takeover | httprobe | tee hosts ; meg -d 1000 -v / hosts | gf cors > cors
-cat takeover | httprobe | tee hosts ; meg -d 1000 -v / hosts | gf s3-buckets > s3-buckets
+cat ./${TARGET}/takeover | httprobe | tee hosts ; meg -d 1000 -v / hosts | gf cors > ./${TARGET}/cors
+cat ./${TARGET}/takeover | httprobe | tee hosts ; meg -d 1000 -v / hosts | gf s3-buckets > ./${TARGET}/s3-buckets
