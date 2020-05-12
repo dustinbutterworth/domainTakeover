@@ -7,3 +7,4 @@ out/
 s3-buckets
 takeover
 tool/
+*.out
