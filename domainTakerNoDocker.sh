@@ -77,9 +77,10 @@ fi
 printf "#######################################################\n"
 echo "Deduping, sorting, removing nasty characters..."
 printf "#######################################################\n\n\n"
-sed -e "s///" ./${TARGET}/domains > ./${TARGET}/domains_nochars
+sed -e "s/
+//" ./${TARGET}/domains > ./${TARGET}/domains_nochars
 cat ./${TARGET}/domains_nochars | sort -u | uniq > ./${TARGET}/domains_dd
-sed -i '' '/^[^[:alnum:]]/d' ./${TARGET}/domains_dd
+sed -i '/^[^[:alnum:]]/d' ./${TARGET}/domains_dd
 rm -f ./${TARGET}/domains
 rm -f ./${TARGET}/domains_nochars
 printf "#######################################################\n"
